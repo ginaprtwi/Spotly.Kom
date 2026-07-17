@@ -120,6 +120,8 @@
 }
 
 .card-register-form-container2 {
+	width: 100%;
+ 	box-sizing: border-box;
 	margin: 2px 15px 0 21px;
 	text-align: center;
 	background: linear-gradient(90deg, #7c3aed 0%, #20007f 100%) top left / auto auto no-repeat;
