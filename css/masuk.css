@@ -1,0 +1,236 @@
+body {
+	min-height: 730px;
+	gap: 0;
+	padding-bottom: 128px;
+}
+
+.header {
+	container: header / inline-size;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background: linear-gradient(90deg, #fff 0%, rgba(248, 249, 255, 0) 100%) top left / auto auto no-repeat;
+	padding: 0 65px;
+	border-bottom: 1px solid #d8d8d8;
+}
+
+.header-container1 {
+	width: 100%;
+	max-width: 1024px;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	padding: 4px 24px;
+}
+
+.header-container2 {
+	margin-top: 5px;
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+	font-size: 12px;
+	font-weight: 500;
+	line-height: 1.333;
+}
+
+.header-btn1 {
+	min-height: 30px;
+	justify-content: center;
+	text-align: center;
+	background-image: linear-gradient(90deg, #7c3aed 0%, #20007f 100%);
+	padding-top: 7px;
+	padding-bottom: 7px;
+}
+
+.header-btn2 {
+	min-height: 30px;
+	justify-content: center;
+	color: #333;
+	text-align: center;
+}
+
+.main-margin {
+	container: main-margin / inline-size;
+	padding-top: 40px;
+	padding-bottom: 18px;
+}
+
+.main-margin-main {
+	display: flex;
+	align-items: flex-start;
+	gap: 40px;
+}
+
+.main-margin-container1 {
+	width: 469px;
+	display: flex;
+	flex-direction: column;
+	gap: 42px;
+	flex-shrink: 0;
+	text-align: left;
+}
+
+.card-landscape-placeholder {
+	position: relative;
+	box-shadow: 0px 4px 90px 0.5px rgba(166, 175, 255, 0.7);
+	margin-right: 1px;
+	display: flex;
+	flex-direction: column;
+	background-color: #e0e0e0;
+	border: 1px solid #bbb;
+	border-radius: 40px;
+	overflow: hidden;
+}
+
+.card-landscape-placeholder-container {
+	position: absolute; top: 0; left: 0; right: 0; 
+	height: 349px;
+	background-color: #d8d8d8;
+}
+
+.card-landscape-placeholder-icon {
+	position: relative; z-index: 1;
+	flex-shrink: 0;
+}
+
+.main-margin-container2 {
+	margin-left: 1px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.main-margin-text-heading {
+	color: var(--primary);
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 1.375;
+}
+
+.main-margin-text-paragraph {
+	color: #000;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.393;
+}
+
+.card-login-form {
+	box-shadow: 0px 8px 30px 0px rgba(0, 0, 0, 0.08);
+	width: 468px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	flex-shrink: 0;
+	font-size: 12px;
+	text-align: left;
+	background-color: var(--y);
+	padding: 32px 31px 64px 31px;
+	border: 1px solid #d0d0d0;
+	border-radius: 10px;
+}
+
+.card-login-form-text-heading {
+	margin: 0 1px;
+}
+
+.card-login-form-text-paragraph {
+	margin: 0 1px;
+	color: #000;
+}
+
+.input-group-container {
+	margin-left: 1px; margin-right: unset; margin-top: 20px;
+	width: 100%;
+	max-width: 402px;
+	align-self: start;
+}
+
+.input-group-container .input-group-margin-text {
+	color: #000;
+}
+
+.container-margin {
+	margin: 12px 1px 0 1px;
+}
+
+.container-margin .margin-text-label {
+	color: #000;
+}
+
+.card-login-form-btn {
+	margin: 39px 1px 0 1px;
+	display: flex;
+	justify-content: center;
+	text-align: center;
+	background: linear-gradient(90deg, #6e44ff 0%, #20007f 100%) top left / auto auto no-repeat;
+	padding: 10px 12px;
+	border-radius: 4px;
+}
+
+.card-login-form-text-container {
+	margin-top: 24px;
+	text-align: center;
+}
+
+
+
+/** breakpoints (margin / paddings) **/
+
+@media screen and (max-width: 1024px) {
+	.header {
+		padding-inline: var(--margin-md);
+	}
+	.header-container1 {
+		padding-inline: 0;
+	}
+	.card-login-form {
+		padding-inline: var(--margin-sm);
+	}
+}
+
+@media screen and (max-width: 576px) {
+	.header {
+		padding-inline: var(--margin-sm);
+	}
+}
+
+
+
+/* container queries (flex rows) */
+
+@container header (width < 322px) {
+	.header-container1 {
+		flex-direction: column;
+		align-items: center;
+		gap: 13px;
+	}
+	.header-container1 > * {
+		margin-top: unset !important;
+		text-align: center;
+	}
+}
+
+@container main-margin (width < 975px) {
+	.main-margin-main {
+		flex-direction: column;
+		align-items: center;
+		gap: 72px;
+	}
+	.main-margin-main > * {
+		text-align: center;
+	}
+	.main-margin-main > .main-margin-container1 {
+		width: 100%;
+		max-width: 469px;
+	}
+	.main-margin-main .input-group-container {
+		align-self: center;
+	}
+	.main-margin-main > .card-login-form {
+		width: 100%;
+		max-width: 468px;
+	}
+	.main-margin-main > .card-login-form > * {
+		text-align: unset;
+	}
+}

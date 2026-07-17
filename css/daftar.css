@@ -1,0 +1,269 @@
+.body-a-wire-box {
+	width: 100%;
+	min-width: 0;
+	flex-grow: 1;
+	border: 1px solid #c0c0c0;
+	border-radius: 4px;
+}
+
+.body-a {
+	min-height: 730px;
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+	background-color: #fff;
+	padding-bottom: 12px;
+}
+
+.header {
+	container: header / inline-size;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: #fff;
+	padding: 0 65px;
+	border-bottom: 1px solid #d8d8d8;
+}
+
+.header-container1 {
+	width: 100%;
+	max-width: 1024px;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	padding: 4px 24px;
+}
+
+.header-container2 {
+	margin-top: 5px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 12px;
+	font-weight: 500;
+	line-height: 1.333;
+}
+
+.header-btn1 {
+	justify-content: center;
+	color: #333;
+	text-align: center;
+}
+
+.header-btn2 {
+	justify-content: center;
+	text-align: center;
+	background-image: linear-gradient(90deg, #7c3aed 0%, #20007f 100%);
+	padding-top: 6px;
+	padding-bottom: 6px;
+}
+
+.body-a-main-content1 {
+	container: body-a-main-content1 / inline-size;
+	padding-top: 40px;
+	padding-bottom: 40px;
+}
+
+.body-a-main-content2 {
+	width: 100%;
+	max-width: 976px;
+	display: flex;
+	align-items: flex-start;
+	gap: 36px;
+}
+
+.card-register-form {
+	box-shadow: 0px 8px 30px 0px rgba(0, 0, 0, 0.08);
+	margin-left: -50px; margin-top: 8px;
+	width: 106%;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	flex-grow: 1;
+	font-size: 12px;
+	background-color: var(--y);
+	padding: 31px 13px 52px 13px;
+	border: 1px solid #d0d0d0;
+	border-radius: 10px;
+}
+
+.card-register-form-container1 {
+	margin-left: 21px; margin-right: 15px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	text-align: left;
+}
+
+.card-register-form-text-paragraph {
+	color: #000;
+	font-weight: 400;
+	line-height: 1.625;
+}
+
+.field-margin {
+	margin-left: 21px; margin-right: 15px;
+	text-align: left;
+}
+
+.field-margin .margin-text-label {
+	color: #333;
+}
+
+.card-register-form-label {
+	margin-left: 21px;
+	width: 13px; height: 15px;
+	display: flex;
+	align-items: flex-start;
+	flex-shrink: 0;
+	align-self: start;
+}
+
+.card-register-form-container2 {
+	margin: 2px 15px 0 21px;
+	text-align: center;
+	background: linear-gradient(90deg, #7c3aed 0%, #20007f 100%) top left / auto auto no-repeat;
+	padding: 10px 13px;
+	border-radius: 4px;
+}
+
+.card-register-form-text-container {
+	margin-top: 12px;
+	text-align: center;
+}
+
+.body-a-illustration {
+	width: 94%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 75px;
+	flex-grow: 1;
+	text-align: center;
+	padding: 108px 0;
+}
+
+.body-a-container1 {
+	box-shadow: 0px 4px 90px 0px rgba(166, 175, 255, 0.7);
+	width: 100%;
+	max-width: 464px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.body-a-container2 {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+}
+
+.body-a-wire-box1 {
+	width: unset;
+	justify-content: center;
+}
+
+.body-a-wire-box2 {
+	width: 80px;
+}
+
+.body-a-container3 {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+}
+
+.body-a-container4 {
+	margin-left: 7px;
+	width: 267px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 6px;
+}
+
+.body-a-text-heading {
+	align-self: stretch;
+	color: var(--primary);
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.429;
+}
+
+.body-a-text-paragraph {
+	color: #000;
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 1.354;
+}
+
+
+
+/** breakpoints (margin / paddings) **/
+
+@media screen and (max-width: 640px) {
+	.header {
+		padding-inline: var(--margin-md);
+	}
+	.header-container1 {
+		padding-inline: 0;
+	}
+	.card-register-form {
+		margin-inline: 0;
+	}
+	.card-register-form-container1 {
+		margin-inline: 0;
+	}
+	.field-margin {
+		margin-inline: 0;
+	}
+	.card-register-form-container2 {
+		margin-inline: 0;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.header {
+		padding-inline: var(--margin-sm);
+	}
+}
+
+
+
+/* container queries (flex rows) */
+
+@container header (width < 320px) {
+	.header-container1 {
+		flex-direction: column;
+		align-items: center;
+		gap: 13px;
+	}
+	.header-container1 > * {
+		margin-top: unset !important;
+		text-align: center;
+	}
+}
+
+@container body-a-main-content1 (width < 947px) {
+	.body-a-main-content2 {
+		flex-direction: column;
+		align-items: center;
+		gap: 100px;
+	}
+	.body-a-main-content2 > * {
+		margin-left: unset !important; margin-top: unset !important;
+		text-align: center;
+	}
+	.body-a-main-content2 .card-register-form-label {
+		align-self: center;
+	}
+	.body-a-main-content2 > .card-register-form {
+		width: 100%;
+	}
+	.body-a-main-content2 > .card-register-form > * {
+		text-align: unset;
+	}
+	.body-a-main-content2 > .body-a-illustration {
+		width: 100%;
+	}
+}
