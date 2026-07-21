@@ -12,16 +12,16 @@ body {
 
 
 
-/* container-a */
+/* container */
 
-.container-a {
+.container {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	color: var(--primary);
 }
 
-.container-text-heading {
+.container-text {
 	font-size: 14px;
 	font-weight: 600;
 	line-height: 1.429;
@@ -36,10 +36,14 @@ body {
 	font-weight: 500;
 }
 
-.container-text-lihat {
+.container-btn-lihat {
+	display: flex;
+	justify-content: center;
+	font-style: normal;
+	letter-spacing: 0px;
 	text-align: center;
 }
-/* end container-a*/
+/* end container*/
 
 
 .icon {
@@ -59,7 +63,7 @@ body {
 	border-radius: 4px;
 }
 
-.container-container {
+.icon-container-a {
 	width: 56px;
 	flex-shrink: 0;
 	border: 1px solid #c0c0c0;
@@ -68,9 +72,9 @@ body {
 
 
 
-/* container-b */
+/* icon-container-b */
 
-.container-b {
+.icon-container-b {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
@@ -80,13 +84,13 @@ body {
 	text-align: left;
 }
 
-.container-text-paragraph {
+.icon-container-text-paragraph {
 	align-self: stretch;
 	color: var(--text);
 	font-size: 10px;
 }
 
-.container-container1 {
+.icon-container-container {
 	display: flex;
 	align-items: center;
 	gap: 2px;
@@ -94,7 +98,7 @@ body {
 	font-size: 9px;
 }
 
-.container-circle {
+.icon-container-circle {
 	position: relative;
 	width: 9px; height: 9px;
 	flex-shrink: 0;
@@ -102,22 +106,22 @@ body {
 	border-radius: 50%;
 }
 
-.container-graphic {
+.icon-container-graphic {
 	position: absolute; top: 1px; left: 3px; 
 	width: 3px; height: 4px;
 }
 
-.container-text-buka {
+.icon-container-text-buka {
 	text-align: left;
 }
-/* end container-b*/
+/* end icon-container-b*/
 
 
 
 
-/* container-c */
+/* icon-container-c */
 
-.container-c {
+.icon-container-c {
 	display: flex;
 	align-items: flex-start;
 	gap: 2px;
@@ -126,10 +130,10 @@ body {
 	font-weight: 500;
 }
 
-.container-text {
+.icon-container-text {
 	text-align: left;
 }
-/* end container-c*/
+/* end icon-container-c*/
 
 
 .container1 {
@@ -140,9 +144,8 @@ body {
 	padding-bottom: 23px;
 }
 
-.header {
-	container: header / inline-size;
-	position: relative; z-index: 2;
+.container-header {
+	container: container-header / inline-size;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
@@ -151,13 +154,13 @@ body {
 	border-bottom: 1px solid #d8d8d8;
 }
 
-.header-container1 {
+.container-container1 {
 	display: flex;
 	align-items: center;
 	gap: 32px;
 }
 
-.header-container2 {
+.container-container2 {
 	display: flex;
 	align-items: center;
 	gap: 8px;
@@ -167,17 +170,17 @@ body {
 	line-height: 1.429;
 }
 
-.header-wire-box {
+.container-wire-box {
 	width: 40px;
 	flex-shrink: 0;
 	border-radius: 6px;
 }
 
-.header-text {
+.container-text2 {
 	text-align: left;
 }
 
-.header-nav {
+.container-nav {
 	display: flex;
 	align-items: center;
 	gap: 16px;
@@ -188,19 +191,23 @@ body {
 	padding-right: 12px;
 }
 
-.header-text-btn1 {
+.container-text-btn {
 	color: var(--text);
 	text-align: center;
 	padding: 4px 12px 2px 13px;
 	border-bottom: 2px solid var(--primary);
 }
 
-.header-text-btn2 {
+.container-btn2 {
+	display: flex;
+	justify-content: center;
 	text-align: center;
 }
 
-.header-text-btn3 {
+.container-btn3 {
 	margin-left: 12px;
+	display: flex;
+	justify-content: center;
 	text-align: center;
 }
 
@@ -218,7 +225,7 @@ body {
 	padding-top: 0;
 }
 
-.container-container2 {
+.container-container3 {
 	margin-left: 74px; margin-bottom: -48px;
 	width: 100%;
 	max-width: 1005px;
@@ -226,7 +233,7 @@ body {
 	align-items: flex-start;
 }
 
-.container-container3 {
+.container-container4 {
 	margin-top: 32px;
 	display: flex;
 	flex-direction: column;
@@ -236,7 +243,7 @@ body {
 	text-align: left;
 }
 
-.container-container4 {
+.container-container5 {
 	margin-left: 3px;
 	display: flex;
 	flex-direction: column;
@@ -253,9 +260,10 @@ body {
 	line-height: 1.333;
 }
 
-.container-text-paragraph2 {
+.container-text-paragraph {
 	width: 100%;
 	max-width: 763px;
+	align-self: end;
 	color: var(--text);
 	font-size: 12px;
 	font-weight: 400;
@@ -276,7 +284,7 @@ body {
 	border-radius: 10px;
 }
 
-.container-icon3 {
+.container-icon2 {
 	margin-top: 1px;
 	width: 13px; height: 13px;
 	flex-shrink: 0;
@@ -321,7 +329,7 @@ body {
 	line-height: 1.5;
 }
 
-.container2 .container-icon1 {
+.container2 .container-icon {
 	width: 12px; height: 12px;
 }
 
@@ -440,33 +448,39 @@ body {
 	gap: 4px;
 }
 
-.container3 .container-icon1 {
+.container3 .container-icon {
 	width: 12px; height: 12px;
 }
 
-.container-margin4 {
+.btn-margin1 {
 	margin-top: 8px;
 	gap: 12px;
+	font-style: normal;
+	letter-spacing: 0px;
+	text-align: unset;
 	padding-bottom: 10px;
 }
 
-.container5 .container-icon2 {
+.icon-container2 .icon-container-icon {
 	margin-top: 3px;
 	width: 10px; height: 10px;
 }
 
-.container-margin5 {
+.btn-margin2 {
 	gap: 12px;
+	font-style: normal;
+	letter-spacing: 0px;
+	text-align: unset;
 	padding-bottom: 9px;
 }
 
-.container7 .container-icon2 {
+.icon-container4 .icon-container-icon {
 	margin-top: 3px;
 	width: 10px; height: 10px;
 }
 
 .img {
-	position: absolute; z-index: 3; top: 595px; left: 106px; 
+	position: absolute; z-index: 2; top: 595px; left: 106px; 
 	width: 55px;
 }
 
@@ -475,10 +489,10 @@ body {
 /** breakpoints (margin / paddings) **/
 
 @media screen and (max-width: 1024px) {
-	.header {
+	.container-header {
 		padding-inline: var(--margin-md);
 	}
-	.container-container4 {
+	.container-container5 {
 		margin-inline: 0;
 	}
 	.container-tabloid1 {
@@ -490,7 +504,7 @@ body {
 }
 
 @media screen and (max-width: 576px) {
-	.header {
+	.container-header {
 		padding-inline: var(--margin-sm);
 	}
 }
@@ -499,33 +513,33 @@ body {
 
 /* container queries (flex rows) */
 
-@container header (width < 432px) {
-	.header-container1 {
+@container container-header (width < 432px) {
+	.container-container1 {
 		flex-direction: column;
 		align-items: center;
 		gap: 13px;
 	}
-	.header-container1 > * {
+	.container-container1 > * {
 		text-align: center;
 	}
 }
 
 @container container-margin1 (width < 1077px) {
-	.container-container2 {
+	.container-container3 {
 		margin-left: 0;
 		flex-direction: column;
 		align-items: center;
 		gap: 27px;
 	}
-	.container-container2 > * {
+	.container-container3 > * {
 		margin-left: unset !important; margin-right: unset !important; margin-top: unset !important;
 		text-align: center;
 	}
-	.container-container2 > .container-container3 {
+	.container-container3 > .container-container4 {
 		width: 100%;
 		align-items: center;
 	}
-	.container-container2 > .container-tabloid1 {
+	.container-container3 > .container-tabloid1 {
 		width: 100%;
 		max-width: 387px;
 	}
