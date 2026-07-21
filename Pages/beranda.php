@@ -8,6 +8,7 @@ if (!isset($_SESSION['nim'])) {
 
 $nim  = $_SESSION['nim'];
 $nama = $_SESSION['nama'];
+
 ?>
 
 

@@ -91,9 +91,9 @@ $total_pengajuan = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
 				</div>
 				
 				<div class="header-nav">
-					<p class="header-text-btn1">Beranda</p>
+					<a href="beranda.php" class="navigation-text-btn3">Beranda</a>
 					<p class="header-text-btn2">Pengelolaan Tempat</p>
-					<p class="header-text-btn3">Profil</p>
+					<a href="profil.php" class="navigation-text-btn3">Profil</a>
 				</div>
 			</div>
 		</header>
