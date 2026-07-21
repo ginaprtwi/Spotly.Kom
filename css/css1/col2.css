@@ -224,9 +224,12 @@ body {
 }
 
 .container-text-input {
-	width: 334px;
-	flex-shrink: 0;
-	text-align: left;
+    width: 334px;
+    flex-shrink: 0;
+    text-align: left;
+    border: none;
+    outline: none;
+    background: transparent;
 }
 
 .container-tabloid1 {

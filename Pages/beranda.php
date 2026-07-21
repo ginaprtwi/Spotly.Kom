@@ -34,8 +34,8 @@ $nama = $_SESSION['nama'];
 				</div>
 				
 				<div class="navigation nav">
-					<p class="text-button navigation-text-btn1">Beranda  </p>
-					<p class="navigation-text-btn2">Pengelolaan Tempat</p>
+					<a href = "beranda.php" p class="text-button navigation-text-btn1">Beranda  </p>
+					<a href = "pengelolaan_tempat.php" p class="navigation-text-btn2">Pengelolaan Tempat</p>
 					<a href="profil.php" class="navigation-text-btn3">Profil</a>
 				</div>
 			</div>
@@ -55,7 +55,9 @@ $nama = $_SESSION['nama'];
 						
 						<div class="container-margin3">
 							<object data="../assets/assets1/col/container-icon.svg" class="container-icon4" type="image/svg+xml"></object>
-							<p class="container-text-input">Cari tempat belajar...</p>
+							<div class="search-box">
+    					<input type="text" class="container-text-input" placeholder="Cari tempat belajar...">
+						</div>
 						</div>
 					</div>
 					
@@ -143,10 +145,10 @@ $nama = $_SESSION['nama'];
 				<div class="container-c container5">
 					<p class="container-text3">Tempat Populer</p>
 					
-					<div class="container-btn">
+					<a href = "pencarian.php" class="container-btn">
 						<button class="container-btn-lihat text2 hover-zoom">Lihat semua </button>
 						<object data="../assets/assets1/col/container-button/container-icon.svg" class="icon container-icon2" type="image/svg+xml"></object>
-					</div>
+					</a>
 				</div>
 				
 				<div class="container-margin5 card-white2">
@@ -194,7 +196,6 @@ $nama = $_SESSION['nama'];
 		</div>
 	</div>
 	
-	<img src="../assets/container-container.png" class="img" />
 </body>
 
 </html>
