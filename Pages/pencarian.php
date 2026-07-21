@@ -1,3 +1,66 @@
+<?php
+require_once __DIR__ . '\koneksi.php';
+
+// 1. Capture filter inputs from GET request
+$search           = $_GET['q'] ?? '';
+$kategori_tempat  = $_GET['kategori_tempat'] ?? '';
+$kategori_suasana = $_GET['kategori_suasana'] ?? '';
+$fasilitas        = $_GET['fasilitas'] ?? []; // Array of checked facilities
+$sort             = $_GET['sort'] ?? '';
+
+// 2. Base Query
+$sql = "SELECT * FROM tempat_belajar WHERE status_tempat = 'Disetujui'";
+$params = [];
+
+// Filter: Search Keyword (Name or Location)
+if (!empty($search)) {
+    $sql .= " AND (nama_tempat LIKE :search OR lokasi LIKE :search)";
+    $params[':search'] = '%' . $search . '%';
+}
+
+// Filter: Kategori Tempat
+if (!empty($kategori_tempat)) {
+    $sql .= " AND kategori_tempat = :kategori_tempat";
+    $params[':kategori_tempat'] = $kategori_tempat;
+}
+
+// Filter: Kategori Suasana
+if (!empty($kategori_suasana)) {
+    $sql .= " AND kategori_suasana = :kategori_suasana";
+    $params[':kategori_suasana'] = $kategori_suasana;
+}
+
+// Filter: Fasilitas (Matches any checked facility in comma-separated column)
+if (!empty($fasilitas) && is_array($fasilitas)) {
+    $fasilitas_conditions = [];
+    foreach ($fasilitas as $index => $fasi) {
+        $param_name = ":fasilitas_" . $index;
+        $fasilitas_conditions[] = "fasilitas LIKE " . $param_name;
+        $params[$param_name] = '%' . $fasi . '%';
+    }
+    $sql .= " AND (" . implode(" OR ", $fasilitas_conditions) . ")";
+}
+
+// Filter: Sorting
+if ($sort === 'nama_asc') {
+    $sql .= " ORDER BY nama_tempat ASC";
+} elseif ($sort === 'nama_desc') {
+    $sql .= " ORDER BY nama_tempat DESC";
+} else {
+    $sql .= " ORDER BY id_tempat DESC"; // Default
+}
+
+try {
+    // 3. Execute Prepared Statement
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    $places = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $total_places = count($places);
+} catch (PDOException $e) {
+    die("Query failed: " . $e->getMessage());
+}
+?>
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -52,223 +115,127 @@
 					</div>
 					
 					<div class="pencarian-container4">
-						<div class="pencarian-filter-sidebar">
-							<button class="btn1 hover-dark">
+						<form method="GET" action="pencarian.php" class="pencarian-filter-sidebar">
+							<!-- Search Bar -->
+							<div class="btn1 hover-dark" style="display: flex; align-items: center; padding: 8px 12px; gap: 8px;">
 								<object data="../assets/assets1/col/btn-icon1.svg" class="btn-icon1" type="image/svg+xml"></object>
-								<p class="btn-label1">Cari tempat belajar...</p>
-							</button>
+								<input type="text" name="q" value="<?= htmlspecialchars($search); ?>" placeholder="Cari tempat belajar..." style="border: none; background: transparent; outline: none; width: 100%; font-family: inherit;">
+							</div>
 							
+							<!-- Kategori Tempat -->
 							<div class="check-group check-group1">
 								<p class="check-group-text">Kategori Tempat</p>
-								
 								<div class="check-group-container">
-									<div class="label-a label1">
-										<object data="../assets/assets1/col/label/label-fluent-radio.svg" class="label-carbon-checkbox label-fluent-radio" type="image/svg+xml"></object>
-										<p class="label-text">Di Kampus</p>
-									</div>
+									<label class="label-a label1" style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+										<input type="radio" name="kategori_tempat" value="Di kampus" <?= $kategori_tempat === 'Di kampus' ? 'checked' : ''; ?>>
+										<span class="label-text">Di Kampus</span>
+									</label>
 									
-									<div class="label-a label2">
-										<object data="../assets/assets1/col/label/label-fluent-radio.svg" class="label-carbon-checkbox label-fluent-radio" type="image/svg+xml"></object>
-										<p class="label-text">Sekitar Kampus</p>
-									</div>
-									
-									<div class="label-b check-group-label">
-									</div>
+									<label class="label-a label2" style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin-top: 6px;">
+										<input type="radio" name="kategori_tempat" value="Sekitar Kampus" <?= $kategori_tempat === 'Sekitar Kampus' ? 'checked' : ''; ?>>
+										<span class="label-text">Sekitar Kampus</span>
+									</label>
 								</div>
 							</div>
 							
+							<!-- Suasana -->
 							<div class="check-group check-group2">
 								<p class="check-group-text">Suasana</p>
-								
 								<div class="check-group-container">
-									<div class="label-a label1">
-										<object data="../assets/assets1/col/label/label-fluent-radio.svg" class="label-carbon-checkbox label-fluent-radio" type="image/svg+xml"></object>
-										<p class="label-text">Tenang (Privat)</p>
-									</div>
+									<label class="label-a label1" style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+										<input type="radio" name="kategori_suasana" value="Tenang" <?= $kategori_suasana === 'Tenang' ? 'checked' : ''; ?>>
+										<span class="label-text">Tenang (Privat)</span>
+									</label>
 									
-									<div class="label-a label2">
-										<object data="../assets/assets1/col/label/label-fluent-radio.svg" class="label-carbon-checkbox label-fluent-radio" type="image/svg+xml"></object>
-										<p class="label-text">Ramah diskusi </p>
-									</div>
-									
-									<div class="label-b check-group-label">
-									</div>
+									<label class="label-a label2" style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin-top: 6px;">
+										<input type="radio" name="kategori_suasana" value="Ramah Diskusi" <?= $kategori_suasana === 'Ramah Diskusi' ? 'checked' : ''; ?>>
+										<span class="label-text">Ramah diskusi</span>
+									</label>
 								</div>
 							</div>
 							
-							<div class="label-b pencarian-container5">
-							</div>
-							
+							<!-- Fasilitas -->
 							<div class="pencarian-check-group">
 								<p class="pencarian-text-paragraph2">Fasilitas</p>
-								
-								<div class="pencarian-container6">
-									<div class="label-a label3">
-										<object data="../assets/assets1/col/label/label-carbon.svg" class="label-carbon-checkbox label-fluent-radio" type="image/svg+xml"></object>
-										<p class="label-text">Colokan</p>
-									</div>
-									
-									<div class="label-a label4">
-										<object data="../assets/assets1/col/label/label-carbon.svg" class="label-carbon-checkbox label-fluent-radio" type="image/svg+xml"></object>
-										<p class="label-text">AC</p>
-									</div>
-									
-									<div class="label-a label5">
-										<object data="../assets/assets1/col/label/label-carbon.svg" class="label-carbon-checkbox label-fluent-radio" type="image/svg+xml"></object>
-										<p class="label-text">WiFi</p>
-									</div>
-									
-									<div class="label-a label6">
-										<object data="../assets/assets1/col/label/label-carbon.svg" class="label-carbon-checkbox label-fluent-radio" type="image/svg+xml"></object>
-										<p class="label-text">Mushola</p>
-									</div>
-									
-									<div class="label-a label7">
-										<object data="../assets/assets1/col/label/label-carbon.svg" class="label-carbon-checkbox label-fluent-radio" type="image/svg+xml"></object>
-										<p class="label-text">Parkir</p>
-									</div>
+								<div class="pencarian-container6" style="display: flex; flex-direction: column; gap: 6px;">
+									<?php 
+										$options_fasilitas = ['Colokan', 'AC', 'WiFi', 'Mushola', 'Parkir'];
+										foreach ($options_fasilitas as $f): 
+											$isChecked = in_array($f, $fasilitas) ? 'checked' : '';
+									?>
+										<label class="label-a" style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+											<input type="checkbox" name="fasilitas[]" value="<?= $f; ?>" <?= $isChecked; ?>>
+											<span class="label-text"><?= $f; ?></span>
+										</label>
+									<?php endforeach; ?>
 								</div>
 							</div>
 							
-							<div class="label-b pencarian-container7">
-							</div>
-							
+							<!-- Urutkan -->
 							<div class="pencarian-container8">
 								<p class="pencarian-text-paragraph3">Urutkan</p>
-								
 								<div class="pencarian-filter-select">
-									<p class="pencarian-text-rating-tertinggi">Rating Tertinggi</p>
-									<object data="../assets/assets1/col/pencarian-icon2.svg" class="pencarian-icon2" type="image/svg+xml"></object>
+									<select name="sort" style="border: none; background: transparent; outline: none; width: 100%; font-family: inherit; cursor: pointer;">
+										<option value="">Terbaru</option>
+										<option value="nama_asc" <?= $sort === 'nama_asc' ? 'selected' : ''; ?>>Nama (A-Z)</option>
+										<option value="nama_desc" <?= $sort === 'nama_desc' ? 'selected' : ''; ?>>Nama (Z-A)</option>
+									</select>
 								</div>
 							</div>
 							
-							<div class="pencarian-container9">
-								<button class="pencarian-btn hover-bright text2">Terapkan Filter</button>
-								
-								<button class="btn2 hover-zoom">
-									<object data="../assets/assets1/col/btn-icon2.svg" class="btn-icon2" type="image/svg+xml"></object>
-									<p class="btn-label2"> Reset</p>
-								</button>
+							<!-- Action Buttons -->
+							<div class="pencarian-container9" style="display: flex; gap: 8px; margin-top: 16px;">
+								<button type="submit" class="pencarian-btn hover-bright text2" style="cursor: pointer;">Terapkan Filter</button>
+								<a href="pencarian.php" class="btn2 hover-zoom" style="display: flex; align-items: center; justify-content: center; text-decoration: none; padding: 8px 12px;">
+									<span class="btn-label2">Reset</span>
+								</a>
 							</div>
-							
-							<div class="label-b pencarian-container10">
-							</div>
-						</div>
+						</form>
 						
 						<div class="pencarian-results-area">
-							<div class="pencarian-container11">
-								<div class="card-place-a card-place1">
-									<img src="../assets/assets1/col/card-place/card-place-wire-box.png" class="wire-box-b card-place-wire-box1" />
-									
-									<div class="card-place-container1">
-										<p class="text-dark">Perpustakaan Gasibu</p>
+							<p class="pencarian-text-container">
+								<b class="bold-primary"><?= htmlspecialchars($total_places); ?> </b>Tempat ditemukan
+							</p>
+
+							<div class="pencarian-grid-wrapper" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+								<?php foreach ($places as $row): ?>
+									<?php 
+										// Resolve image path
+										$image_src = (!empty($row['foto']) && file_exists(__DIR__ . '/../' . $row['foto'])) 
+													? '../' . htmlspecialchars($row['foto']) 
+													: '../assets/assets1/col/card-place/card-place-wire-box.png';
+
+										// Parse comma-separated facilities
+										$fasilitas_list = !empty($row['fasilitas']) ? explode(',', $row['fasilitas']) : [];
+									?>
+
+									<div class="card-place-b card-place2" style="margin-bottom: 15px;">
+										<img src="<?= $image_src; ?>" class="wire-box-b card-place-wire-box2" alt="<?= htmlspecialchars($row['nama_tempat']); ?>" style="object-fit: cover;" />
 										
-										<div class="container-b container1">
-											<object data="../assets/assets1/col/container/container-icon.svg" class="container-icon1" type="image/svg+xml"></object>
-											<p class="container-text2">4.3</p>
-										</div>
-										
-										<p class="card-place-text-paragraph1">Jl. Majapahit, Citarum, Bandung Wetan</p>
-										<button class="btn-margin card-place-btn-margin hover-dark">Colokan</button>
-									</div>
-								</div>
-								
-								<p class="pencarian-text-container"><b class="bold-primary">12 </b>Tempat ditemukan</p>
-								
-								<div class="card-place-b card-place2">
-									<img src="../assets/assets1/col/card-place/card-place-wire-box2.png" class="wire-box-b card-place-wire-box2" />
-									
-									<div class="card-place-container2">
-										<p class="text-dark">Eduplex Coworking Space</p>
-										
-										<div class="container-b container2">
-											<object data="../assets/assets1/col/container/container-icon.svg" class="container-icon1" type="image/svg+xml"></object>
-											<p class="container-text2">4.6</p>
-										</div>
-										
-										<p class="card-place-text-paragraph2">Jl. Ir. H. Djuanda No. 84, Bandung</p>
-										
-										<div class="card-place-container3">
-											<button class="btn-tag card-place-btn-tag1 hover-dark">Tenang</button>
-											<button class="btn-tag card-place-btn-tag2 hover-dark">WiFi</button>
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<div class="pencarian-container12">
-								<div class="card-place-a card-place3">
-									<img src="../assets/assets1/col/card-place/card-place-wire-box.png" class="wire-box-b card-place-wire-box1" />
-									
-									<div class="card-place-container1">
-										<p class="text-dark">Perpustakaan Gasibu</p>
-										
-										<div class="container-b container1">
-											<object data="../assets/assets1/col/container/container-icon.svg" class="container-icon1" type="image/svg+xml"></object>
-											<p class="container-text2">4.3</p>
-										</div>
-										
-										<p class="card-place-text-paragraph1">Jl. Majapahit, Citarum, Bandung Wetan</p>
-										<button class="btn-margin card-place-btn-margin hover-dark">Colokan</button>
-									</div>
-								</div>
-								
-								<div class="card-place4 card-white1">
-									<img src="../assets/assets1/col/card-place-wire-box1.png" class="wire-box-b card-place-wire-box3" />
-									
-									<div class="card-place-container4">
-										<p class="text-dark">CUPS Coffee & Kitchen</p>
-										
-										<div class="card-place-container5">
-											<object data="../assets/assets1/col/container/container-icon.svg" class="card-place-icon" type="image/svg+xml"></object>
-											<p class="card-place-text">4.1</p>
-										</div>
-										
-										<p class="card-place-text-paragraph3">Jl. Trunojoyo No. 25, Citarum, Bandung Wetan</p>
-										<button class="btn-margin card-place-btn-margin2 hover-dark">Tenang</button>
-									</div>
-								</div>
-								
-								<div class="card-place-b card-place5">
-									<img src="../assets/assets1/col/card-place/card-place-wire-box2.png" class="wire-box-b card-place-wire-box2" />
-									
-									<div class="card-place-container2">
-										<p class="text-dark">Eduplex Coworking Space</p>
-										
-										<div class="container-b container2">
-											<object data="../assets/assets1/col/container/container-icon.svg" class="container-icon1" type="image/svg+xml"></object>
-											<p class="container-text2">4.6</p>
-										</div>
-										
-										<p class="card-place-text-paragraph2">Jl. Ir. H. Djuanda No. 84, Bandung</p>
-										
-										<div class="card-place-container3">
-											<button class="btn-tag card-place-btn-tag1 hover-dark">Tenang</button>
-											<button class="btn-tag card-place-btn-tag2 hover-dark">AC</button>
+										<div class="card-place-container2">
+											<p class="text-dark"><?= htmlspecialchars($row['nama_tempat']); ?></p>
+											
+											<div class="container-b container2">
+												<object data="../assets/assets1/col/container/container-icon.svg" class="container-icon1" type="image/svg+xml"></object>
+												<p class="container-text2">4.5</p>
+											</div>
+											
+											<p class="card-place-text-paragraph2"><?= htmlspecialchars($row['lokasi']); ?></p>
+											
+											<div class="card-place-container3" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;">
+												<button class="btn-tag card-place-btn-tag1 hover-dark">
+													<?= htmlspecialchars($row['kategori_suasana']); ?>
+												</button>
+												
+												<?php foreach ($fasilitas_list as $fasi): ?>
+													<button class="btn-tag card-place-btn-tag2 hover-dark">
+														<?= htmlspecialchars(trim($fasi)); ?>
+													</button>
+												<?php endforeach; ?>
+											</div>
 										</div>
 									</div>
-								</div>
-								
-								<div class="card-place6 card-white1">
-									<img src="../assets/assets1/col/card-place-wire-box2.png" class="wire-box-b card-place-wire-box4" />
-									
-									<div class="card-place-container6">
-										<p class="text-dark">Grind Joe Coffee</p>
-										
-										<div class="container-b container4">
-											<object data="../assets/assets1/col/container/container-icon.svg" class="container-icon1" type="image/svg+xml"></object>
-											<p class="container-text2">4.6</p>
-										</div>
-										
-										<p class="card-place-text-paragraph4">Jl. Ir. H. Juanda No. 69, Tamansari, Bandung</p>
-										
-										<div class="card-place-container7">
-											<button class="btn-tag card-place-btn-tag3 hover-dark">WiFi</button>
-											<button class="btn-tag card-place-btn-tag4 hover-dark">AC</button>
-											<button class="btn-tag card-place-btn-tag5 hover-dark">Colokan</button>
-										</div>
-									</div>
-								</div>
+								<?php endforeach; ?>
 							</div>
 						</div>
 					</div>

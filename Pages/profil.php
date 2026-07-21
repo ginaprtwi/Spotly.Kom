@@ -18,6 +18,55 @@ $nama          = $data_mahasiswa['nama_mahasiswa'];
 $email_unikom  = $data_mahasiswa['email_unikom'];
 
 $riwayatKunjungan = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+// Riwayat Ulasan 
+$query = "SELECT tb.nama_tempat, u.komentar, u.rating, u.tgl_ulasan
+          FROM ulasan u
+          JOIN kunjungan k ON u.id_kunjungan = k.id_kunjungan
+          JOIN tempat_belajar tb ON k.id_tempat = tb.id_tempat
+          WHERE k.nim = :nim
+          ORDER BY u.tgl_ulasan DESC";
+
+$stmt = $pdo->prepare($query);
+$stmt->bindParam(':nim', $nim);
+$stmt->execute();
+
+$riwayatUlasan = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Riwayat Pengajuan 
+$query = "SELECT nama_tempat, status_tempat, tgl_submit
+          FROM tempat_belajar
+          WHERE nim = :nim
+          ORDER BY tgl_submit DESC";
+
+$stmt = $pdo->prepare($query);
+$stmt->bindParam(':nim', $nim);
+$stmt->execute();
+
+$riwayatPengajuan = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Hitung jumlah kunjungan
+$stmt = $pdo->prepare("SELECT COUNT(*) AS total FROM kunjungan WHERE nim = :nim");
+$stmt->bindParam(':nim', $nim);
+$stmt->execute();
+$total_kunjungan = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+
+// Hitung jumlah ulasan 
+$stmt = $pdo->prepare("SELECT COUNT(*) AS total 
+                        FROM ulasan u
+                        JOIN kunjungan k ON u.id_kunjungan = k.id_kunjungan
+                        WHERE k.nim = :nim");
+$stmt->bindParam(':nim', $nim);
+$stmt->execute();
+$total_ulasan = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+
+// Hitung jumlah tempat yang diajukan
+$stmt = $pdo->prepare("SELECT COUNT(*) AS total FROM tempat_belajar WHERE nim = :nim");
+$stmt->bindParam(':nim', $nim);
+$stmt->execute();
+$total_pengajuan = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+
 ?>
 
 <!DOCTYPE html>
@@ -69,17 +118,17 @@ $riwayatKunjungan = $stmt->fetchAll(PDO::FETCH_ASSOC);
 							
 							<div class="card-container4">
 								<div class="container-d container4">
-									<p class="container-text-paragraph4">24</p>
+									<p class="container-text-paragraph4"><?= $total_kunjungan ?></p>
 									<p class="container-text-paragraph5">Kunjungan</p>
 								</div>
-								
+
 								<div class="container-d container5">
-									<p class="container-text-paragraph4">12</p>
+									<p class="container-text-paragraph4"><?= $total_ulasan ?></p>
 									<p class="container-text-paragraph5">Ulasan</p>
 								</div>
-								
+
 								<div class="container-d container6">
-									<p class="container-text-paragraph4">8</p>
+									<p class="container-text-paragraph4"><?= $total_pengajuan ?></p>
 									<p class="container-text-paragraph5">
 										Tempat <br />
 										Diajukan
@@ -121,11 +170,69 @@ $riwayatKunjungan = $stmt->fetchAll(PDO::FETCH_ASSOC);
 								<?php endif; ?>
 							</div>
 						</div>
+
+						<div class="body-a-container4 tab-content" id="tab-ulasan" style="display: none;">
+							<p class="body-a-text-container text3">Riwayat Ulasan</p>
+
+							<div class="body-a-container5">
+								<?php if (count($riwayatUlasan) > 0): ?>
+									<?php foreach ($riwayatUlasan as $data): ?>
+										<div class="card card3">
+											<div class="card-container2">
+												<p class="card-text text5"><?= htmlspecialchars($data['nama_tempat']) ?></p>
+												<p><?= htmlspecialchars($data['komentar']) ?></p>
+												<div class="container-f container2">
+													<p class="container-text-paragraph6">Rating: <?= htmlspecialchars($data['rating']) ?>/5</p>
+													<p class="container-text-paragraph7"><?= date('d M Y', strtotime($data['tgl_ulasan'])) ?></p>
+												</div>
+											</div>
+										</div>
+									<?php endforeach; ?>
+								<?php else: ?>
+									<p>Belum ada riwayat ulasan</p>
+								<?php endif; ?>
+							</div>
+						</div>
+
+						<div class="body-a-container4 tab-content" id="tab-pengajuan" style="display: none;">
+							<p class="body-a-text-container text3">Riwayat Pengajuan Tempat</p>
+
+							<div class="body-a-container5">
+								<?php if (count($riwayatPengajuan) > 0): ?>
+									<?php foreach ($riwayatPengajuan as $data): ?>
+										<div class="card card3">
+											<div class="card-container2">
+												<p class="card-text text5"><?= htmlspecialchars($data['nama_tempat']) ?></p>
+												<div class="container-f container2">
+													<p class="container-text-paragraph6">Status: <?= htmlspecialchars($data['status_tempat']) ?></p>
+													<p class="container-text-paragraph7"><?= date('d M Y', strtotime($data['tgl_submit'])) ?></p>
+												</div>
+											</div>
+										</div>
+									<?php endforeach; ?>
+								<?php else: ?>
+									<p>Belum ada riwayat pengajuan</p>
+								<?php endif; ?>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+        this.classList.add('active');
+        var target = this.getAttribute('data-tab');
+        document.getElementById('tab-' + target).style.display = 'block';
+    });
+});
+</script>
+
 </body>
 
 </html>
