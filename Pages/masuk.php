@@ -16,10 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_submit'])) {
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($user) {
-                if ($password === $user['password']) {
+                if (password_verify($password, $user['password'])) {
+                    
+                    // Success! Store user information in the session
                     $_SESSION['nim'] = $user['nim'];
-                    $_SESSION['nama'] = $user['nama_mahasiswa'];   
-                    // Redirect to your homepage/dashboard
+                    $_SESSION['nama'] = $user['nama_mahasiswa'];
+                    
                     header("Location: beranda.php"); 
                     exit;
                 } else {
