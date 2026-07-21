@@ -235,7 +235,10 @@ body {
 	border-radius: 4px;
 }
 
-
+.navigation a {
+    text-decoration: none;
+    color: inherit;
+}
 
 /** breakpoints (margin / paddings) **/
 
@@ -244,3 +247,4 @@ body {
 		margin-inline: 0;
 	}
 }
+
