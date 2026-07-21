@@ -1,3 +1,16 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['nim'])) {
+    header("Location: masuk.php");
+    exit();
+}
+
+$nim  = $_SESSION['nim'];
+$nama = $_SESSION['nama'];
+?>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,7 +35,7 @@
 				<div class="navigation nav">
 					<p class="text-button navigation-text-btn1">Beranda  </p>
 					<p class="navigation-text-btn2">Pengelolaan Tempat</p>
-					<p class="navigation-text-btn3">Profil</p>
+					<a href="profil.php" class="navigation-text-btn3">Profil</a>
 				</div>
 			</div>
 		</header>
@@ -32,7 +45,7 @@
 				<div class="container-container2">
 					<div class="container-container3">
 						<div class="container-container4">
-							<h2 class="subtitle-primary">Halo, Imanuel!</h2>
+							<h2 class="subtitle-primary">Halo, <?= htmlspecialchars($nama) ?>!</h2>
 							<p class="container-text-paragraph2 text-text">
 								Temukan tempat belajar terbaik di sekitarmu<br />
 								dan belajar lebih nyaman hari ini.

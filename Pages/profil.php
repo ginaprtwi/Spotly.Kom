@@ -1,3 +1,25 @@
+<?php
+session_start();
+require_once 'koneksi.php';
+
+if (!isset($_SESSION['nim'])) {
+    header("Location: masuk.php");
+    exit();
+}
+
+$nim = $_SESSION['nim'];
+
+$stmt = $pdo->prepare("SELECT nim, nama_mahasiswa, email_unikom FROM mahasiswa WHERE nim = :nim");
+$stmt->bindParam(':nim', $nim);
+$stmt->execute();
+$data_mahasiswa = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$nama          = $data_mahasiswa['nama_mahasiswa'];
+$email_unikom  = $data_mahasiswa['email_unikom'];
+
+$riwayatKunjungan = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,9 +62,9 @@
 					<div class="body-a-sidebar">
 						<div class="card1">
 							<div class="card-container3">
-								<p class="card-text-paragraph1 text3">Imanuel Gilberto</p>
-								<p class="card-text-paragraph2 text-border">NIM: 10124275</p>
-								<p class="card-text-paragraph3">imanuel.10124275@mahasiswa.unikom.ac.id</p>
+								<p class="card-text-paragraph1 text3"><?= htmlspecialchars($nama) ?></p>
+								<p class="card-text-paragraph2 text-border">NIM: <?= htmlspecialchars($nim) ?></p>
+								<p class="card-text-paragraph3"><?= htmlspecialchars($email_unikom) ?></p>
 							</div>
 							
 							<div class="card-container4">
@@ -66,102 +88,37 @@
 							</div>
 						</div>
 						
-						<button class="btn-margin1 hover-bright">
-							<object data="../assets/assets2/profil/btn-margin-icon.svg" class="btn-margin-icon" type="image/svg+xml"></object>
-							<p class="btn-margin-label">Keluar</p>
-						</button>
+						<a href="keluar.php" class="btn-margin1 hover-bright">
+    						<object data="../assets/assets2/profil/btn-margin-icon.svg" class="btn-margin-icon" type="image/svg+xml"></object>
+    						<p class="btn-margin-label">Keluar</p>
+						</a>
 					</div>
 					
 					<div class="body-a-container2">
 						<div class="body-a-container3">
-							<p class="body-a-text-btn1">Riwayat Kunjungan</p>
-							<p class="body-a-text-btn2">Riwayat Ulasan</p>
-							<p class="body-a-text-btn3">Riwayat Pengajuan Tempat</p>
+							<p class="body-a-text-btn1 tab-btn active" data-tab="kunjungan">Riwayat Kunjungan</p>
+   							<p class="body-a-text-btn2 tab-btn" data-tab="ulasan">Riwayat Ulasan</p>
+    						<p class="body-a-text-btn3 tab-btn" data-tab="pengajuan">Riwayat Pengajuan Tempat</p>
 						</div>
 						
-						<div class="body-a-container4">
-							<p class="body-a-text-container text3">Riwayat Kunjungan</p>
-							
-							<div class="body-a-container5">
-								<div class="card2">
-									<img src="../assets/assets2/profil/card-container2.png" class="container-e card-container5" />
-									
-									<div class="card-container6">
-										<p class="card-text2 text5">Perpustakaan </p>
-										
-										<div class="container-f container7">
-											<p class="container-text-paragraph6">13 Jul 2026</p>
-											<p class="container-text-paragraph7">10:00 WIB</p>
+						<div class="body-a-container4 tab-content" id="tab-kunjungan">
+    						<p class="body-a-text-container text3">Riwayat Kunjungan</p>
+    						<div class="body-a-container5">
+								<?php if (count($riwayatKunjungan) > 0): ?>
+									<?php foreach ($riwayatKunjungan as $data): ?>
+										<div class="card card3">
+											<img src="../sassets/assets2/profil/card/card-container.png" class="container-e card-container1" />
+											<div class="card-container2">
+												<p class="card-text text5"><?= htmlspecialchars($data['nama_tempat']) ?></p>
+												<div class="container-f container2">
+													<p class="container-text-paragraph6"><?= date('d M Y', strtotime($data['tgl_kunjungan'])) ?></p>
+												</div>
+											</div>
 										</div>
-									</div>
-								</div>
-								
-								<div class="card card3">
-									<img src="../assets/assets2/profil/card/card-container.png" class="container-e card-container1" />
-									
-									<div class="card-container2">
-										<p class="card-text text5">Kantin</p>
-										
-										<div class="container-f container2">
-											<p class="container-text-paragraph6">12 Jul 2026</p>
-											<p class="container-text-paragraph7">14:00 WIB</p>
-										</div>
-									</div>
-								</div>
-								
-								<div class="card card4">
-									<img src="../assets/assets2/profil/card/card-container.png" class="container-e card-container1" />
-									
-									<div class="card-container2">
-										<p class="card-text text5">Perpustakaan </p>
-										
-										<div class="container-f container2">
-											<p class="container-text-paragraph6">12 Jul 2026</p>
-											<p class="container-text-paragraph7">10:00 WIB</p>
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<div class="body-a-container6">
-								<div class="card card5">
-									<img src="../assets/assets2/profil/card/card-container.png" class="container-e card-container1" />
-									
-									<div class="card-container2">
-										<p class="card-text text5">Perpustakaan </p>
-										
-										<div class="container-f container2">
-											<p class="container-text-paragraph6">13 Jul 2026</p>
-											<p class="container-text-paragraph7">10:00 WIB</p>
-										</div>
-									</div>
-								</div>
-								
-								<div class="card card6">
-									<img src="../assets/assets2/profil/card/card-container.png" class="container-e card-container1" />
-									
-									<div class="card-container2">
-										<p class="card-text text5">Kantin</p>
-										
-										<div class="container-f container2">
-											<p class="container-text-paragraph6">12 Jul 2026</p>
-											<p class="container-text-paragraph7">14:00 WIB</p>
-										</div>
-									</div>
-								</div>
-								
-								<div class="card card7">
-									<img src="../assets/assets2/profil/card/card-container.png" class="container-e card-container1" />
-									
-									<div class="card-container2">
-										<p class="card-text text5">Perpustakaan </p>
-										
-										<div class="container-f container2">
-											<p class="container-text-paragraph6">12 Jul 2026</p>
-											<p class="container-text-paragraph7">10:00 WIB</p>
-										</div>
-									</div>
-								</div>
+									<?php endforeach; ?>
+								<?php else: ?>
+									<p>Belum ada riwayat kunjungan</p>
+								<?php endif; ?>
 							</div>
 						</div>
 					</div>

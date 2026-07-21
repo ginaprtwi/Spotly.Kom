@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_submit'])) {
                     // Success! Store user information in the session
                     $_SESSION['nim'] = $user['nim'];
                     $_SESSION['nama'] = $user['nama_mahasiswa'];
-                    
+
                     header("Location: beranda.php"); 
                     exit;
                 } else {
