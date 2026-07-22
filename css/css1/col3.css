@@ -276,9 +276,22 @@ body {
 }
 
 .card-img2 {
-	position: absolute; z-index: 1; top: -5px; left: 0; right: -1px; 
-	width: calc(100% - 0px - -1px);
-	max-width: none;
+	/* 1. Remove absolute positioning so it doesn't float over the card text */
+	position: relative;
+	z-index: 1;
+
+	/* 2. Set strict dimensions for the image area */
+	width: 100%;
+	height: 150px; /* Adjust height to your liking (e.g., 140px - 180px) */
+
+	/* 3. Center and crop the image properly */
+	object-fit: cover;
+	object-position: center;
+	display: block;
+
+	/* 4. Match card top corners (if your card has border-radius) */
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
 }
 
 .card-container5 {
