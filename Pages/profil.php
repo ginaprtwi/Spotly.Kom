@@ -92,7 +92,7 @@ $total_pengajuan = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
 				
 				<div class="header-nav">
 					<a href="beranda.php" class="navigation-text-btn3">Beranda</a>
-					<p class="header-text-btn2">Pengelolaan Tempat</p>
+					<a href = "pengelolaan_tempat.php" class="navigation-text-btn2">Pengelolaan Tempat</a>
 					<a href="profil.php" class="navigation-text-btn3">Profil</a>
 				</div>
 			</div>

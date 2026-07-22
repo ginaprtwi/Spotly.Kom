@@ -20,9 +20,9 @@
 				</div>
 				
 				<div class="pengelolaan-tempat-nav">
-					<p class="pengelolaan-tempat-text-btn1">Beranda</p>
-					<p class="text-button pengelolaan-tempat-text-btn2">Pengelolaan Tempat</p>
-					<p class="pengelolaan-tempat-text-btn3">Profil</p>
+					<a href="beranda.php" class="navigation-text-btn3">Beranda</a>
+					<a href = "pengelolaan_tempat.php" class="navigation-text-btn2">Pengelolaan Tempat</a>
+					<a href="profil.php" class="navigation-text-btn3">Profil</a>
 				</div>
 			</div>
 			

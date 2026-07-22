@@ -34,8 +34,8 @@ $nama = $_SESSION['nama'];
 				</div>
 				
 				<div class="navigation nav">
-					<a href = "beranda.php" p class="text-button navigation-text-btn1">Beranda  </p>
-					<a href = "pengelolaan_tempat.php" p class="navigation-text-btn2">Pengelolaan Tempat</p>
+					<a href="beranda.php" class="navigation-text-btn3">Beranda</a>
+					<a href = "pengelolaan_tempat.php" class="navigation-text-btn2">Pengelolaan Tempat</a>
 					<a href="profil.php" class="navigation-text-btn3">Profil</a>
 				</div>
 			</div>
@@ -73,10 +73,10 @@ $nama = $_SESSION['nama'];
 				<div class="container-c container4">
 					<p class="container-text3">Rekomendasi untukmu</p>
 					
-					<div class="container-btn">
+					<a href = "pencarian.php" class="container-btn">
 						<button class="container-btn-lihat text2 hover-zoom">Lihat semua </button>
 						<object data="../assets/assets1/col/container-button/container-icon.svg" class="icon container-icon2" type="image/svg+xml"></object>
-					</div>
+					</a>
 				</div>
 				
 				<div class="container-margin4">
@@ -86,11 +86,10 @@ $nama = $_SESSION['nama'];
 						<div class="card-container1">
 							<p class="text-dark">Perpustakaan Pusat UNIKOM</p>
 							
-							<div class="card-container2">
-								<button class="btn-text card-btn-text1 hover-dark">Colokan</button>
-								<button class="btn-text card-btn-text2 hover-dark">Tenang</button>
-								<button class="btn-text card-btn-text3 hover-dark">AC</button>
-							</div>
+							<a href = "pencarian.php" class="container-btn">
+								<button class="container-btn-lihat text2 hover-zoom">Lihat semua </button>
+								<object data="../assets/assets1/col/container-button/container-icon.svg" class="icon container-icon2" type="image/svg+xml"></object>
+							</a>
 							
 							<div class="card-container3">
 								<object data="../assets/assets1/col/card-container/card-icon2.svg" class="card-icon" type="image/svg+xml"></object>
