@@ -60,7 +60,7 @@ try {
     die("Query failed: " . $e->getMessage());
 }
 ?>
-?>
+
 <!DOCTYPE html>
 <html>
 <head>
