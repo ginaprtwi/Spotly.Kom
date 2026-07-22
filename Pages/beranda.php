@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once 'koneksi.php';
 
 if (!isset($_SESSION['nim'])) {
     header("Location: masuk.php");
@@ -8,6 +9,21 @@ if (!isset($_SESSION['nim'])) {
 
 $nim  = $_SESSION['nim'];
 $nama = $_SESSION['nama'];
+
+$query = "SELECT tb.id_tempat, tb.nama_tempat, tb.foto, tb.fasilitas,
+                 COUNT(DISTINCT k.id_kunjungan) AS jumlah_kunjungan,
+                 ROUND(AVG(u.rating), 1) AS rata_rating
+          FROM tempat_belajar tb
+          LEFT JOIN kunjungan k ON tb.id_tempat = k.id_tempat
+          LEFT JOIN ulasan u ON k.id_kunjungan = u.id_kunjungan
+          WHERE tb.status_tempat = 'Disetujui'
+          GROUP BY tb.id_tempat
+          ORDER BY jumlah_kunjungan DESC, rata_rating DESC
+          LIMIT 6";
+
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+$topRekomendasi = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 
@@ -33,8 +49,8 @@ $nama = $_SESSION['nama'];
 				</div>
 				
 				<div class="navigation nav">
-					<a href = "beranda.php" p class="text-button navigation-text-btn1">Beranda  </p>
-					<a href = "pengelolaan_tempat.php" p class="navigation-text-btn2">Pengelolaan Tempat</p>
+					<a href="beranda.php" class="navigation-text-btn3">Beranda</a>
+					<a href = "pengelolaan_tempat.php" class="navigation-text-btn2">Pengelolaan Tempat</a>
 					<a href="profil.php" class="navigation-text-btn3">Profil</a>
 				</div>
 			</div>
@@ -55,8 +71,10 @@ $nama = $_SESSION['nama'];
 						<div class="container-margin3">
 							<object data="../assets/assets1/col/container-icon.svg" class="container-icon4" type="image/svg+xml"></object>
 							<div class="search-box">
-    					<input type="text" class="container-text-input" placeholder="Cari tempat belajar...">
-						</div>
+								<form action="pencarian.php" method="GET" style="display: contents;">
+									<input type="text" id="searchBeranda" class="container-text-input" placeholder="Cari tempat belajar...">
+								</form>
+							</div>
 						</div>
 					</div>
 					
@@ -72,129 +90,34 @@ $nama = $_SESSION['nama'];
 				<div class="container-c container4">
 					<p class="container-text3">Rekomendasi untukmu</p>
 					
-					<div class="container-btn">
-						<button class="container-btn-lihat text2 hover-zoom">Lihat semua </button>
-						<object data="../assets/assets1/col/container-button/container-icon.svg" class="icon container-icon2" type="image/svg+xml"></object>
-					</div>
-				</div>
-				
-				<div class="container-margin4">
-					<div class="card card1">
-						<img src="../assets/assets1/col/card/card-img.png" class="card-img" />
-						
-						<div class="card-container1">
-							<p class="text-dark">Perpustakaan Pusat UNIKOM</p>
-							
-							<div class="card-container2">
-								<button class="btn-text card-btn-text1 hover-dark">Colokan</button>
-								<button class="btn-text card-btn-text2 hover-dark">Tenang</button>
-								<button class="btn-text card-btn-text3 hover-dark">AC</button>
-							</div>
-							
-							<div class="card-container3">
-								<object data="../assets/assets1/col/card-container/card-icon2.svg" class="card-icon" type="image/svg+xml"></object>
-								<p class="card-text">4.2</p>
-							</div>
-						</div>
-					</div>
-					
-					<div class="card card2">
-						<img src="../assets/assets1/col/card/card-img.png" class="card-img" />
-						
-						<div class="card-container1">
-							<p class="text-dark">Perpustakaan Pusat UNIKOM</p>
-							
-							<div class="card-container2">
-								<button class="btn-text card-btn-text1 hover-dark">Colokan</button>
-								<button class="btn-text card-btn-text2 hover-dark">Tenang</button>
-								<button class="btn-text card-btn-text3 hover-dark">AC</button>
-							</div>
-							
-							<div class="card-container3">
-								<object data="../assets/assets1/col/card-container/card-icon.svg" class="card-icon" type="image/svg+xml"></object>
-								<p class="card-text">4.2</p>
-							</div>
-						</div>
-					</div>
-					
-					<div class="card card3">
-						<img src="../assets/assets1/col/card/card-img.png" class="card-img" />
-						
-						<div class="card-container1">
-							<p class="text-dark">Perpustakaan Pusat UNIKOM</p>
-							
-							<div class="card-container2">
-								<button class="btn-text card-btn-text1 hover-dark">Colokan</button>
-								<button class="btn-text card-btn-text2 hover-dark">Tenang</button>
-								<button class="btn-text card-btn-text3 hover-dark">AC</button>
-							</div>
-							
-							<div class="card-container3">
-								<object data="../assets/assets1/col/card-container/card-icon.svg" class="card-icon" type="image/svg+xml"></object>
-								<p class="card-text">4.2</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<div class="container-section-margin2 section">
-			<div class="container-section3">
-				<div class="container-c container5">
-					<p class="container-text3">Tempat Populer</p>
-					
 					<a href = "pencarian.php" class="container-btn">
 						<button class="container-btn-lihat text2 hover-zoom">Lihat semua </button>
 						<object data="../assets/assets1/col/container-button/container-icon.svg" class="icon container-icon2" type="image/svg+xml"></object>
 					</a>
 				</div>
 				
-				<div class="container-margin5 card-white2">
-					<img src="../assets/assets1/col/container-container.png" class="container-container" />
-					
-					<div class="container-d container6">
-						<p class="container-text-paragraph text1">Jl. Gufuwara Hartu No. 3, Malang</p>
-						
-						<div class="container-container1">
-							<div class="container-circle">
-								<object data="../assets/assets1/col/container-circle-icon/container-graphic.svg" class="container-graphic" type="image/svg+xml"></object>
-							</div>
-							
-							<p class="container-text-buka">Buka 08.00 – 23.00</p>
-						</div>
-					</div>
-					
-					<div class="container-e container7">
-						<object data="../assets/assets1/col/card-container/card-icon2.svg" class="icon container-icon3" type="image/svg+xml"></object>
-						<p class="container-text4">123</p>
-					</div>
-				</div>
-				
-				<div class="container-margin6 card-white2">
-					<img src="../assets/assets1/col/container-container.png" class="container-container" />
-					
-					<div class="container-d container8">
-						<p class="container-text-paragraph text1">Jl. Gufuwara Hartu No. 3, Malang</p>
-						
-						<div class="container-container1">
-							<div class="container-circle">
-								<object data="../assets/assets1/col/container-circle-icon/container-graphic.svg" class="container-graphic" type="image/svg+xml"></object>
-							</div>
-							
-							<p class="container-text-buka">Buka 08.00 – 23.00</p>
-						</div>
-					</div>
-					
-					<div class="container-e container9">
-						<object data="../assets/assets1/col/card-container/card-icon2.svg" class="icon container-icon3" type="image/svg+xml"></object>
-						<p class="container-text4">123</p>
-					</div>
+				<div class="container-margin4" id="rekomendasiArea">
+					<?php require __DIR__ . '/beranda_card.php'; ?>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
+<script>
+const searchInput = document.getElementById('searchBeranda');
+const rekomendasiArea = document.getElementById('rekomendasiArea');
+let debounceTimer;
+
+searchInput.addEventListener('input', () => {
+	clearTimeout(debounceTimer);
+	debounceTimer = setTimeout(() => {
+		fetch('beranda_card.php?q=' + encodeURIComponent(searchInput.value))
+			.then(res => res.text())
+			.then(html => { rekomendasiArea.innerHTML = html; })
+			.catch(err => console.error('Gagal memuat rekomendasi:', err));
+	}, 300);
+});
+</script>
 </body>
 
 </html>
