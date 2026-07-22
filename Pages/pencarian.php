@@ -84,9 +84,9 @@ try {
 					</div>
 					
 					<div class="navigation nav">
-						<p class="text-button navigation-text-btn1">Beranda</p>
-						<p class="navigation-text-btn2">Pengelolaan Tempat</p>
-						<p class="navigation-text-btn3">Profil</p>
+						<a href = "beranda.php" p class="text-button navigation-text-btn1">Beranda  </p>
+						<a href = "pengelolaan_tempat.php" p class="navigation-text-btn2">Pengelolaan Tempat</p>
+						<a href = "profil.php" class="navigation-text-btn3">Profil</a>
 					</div>
 				</div>
 				
