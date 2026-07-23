@@ -17,6 +17,16 @@ $data_mahasiswa = $stmt->fetch(PDO::FETCH_ASSOC);
 $nama          = $data_mahasiswa['nama_mahasiswa'];
 $email_unikom  = $data_mahasiswa['email_unikom'];
 
+// Riwayat Kunjungan (sesuai pseudocode: JOIN Kunjungan + Tempat Belajar)
+$query = "SELECT k.id_kunjungan, tb.nama_tempat, tb.foto, k.tgl_kunjungan
+          FROM kunjungan k
+          JOIN tempat_belajar tb ON k.id_tempat = tb.id_tempat
+          WHERE k.nim = :nim
+          ORDER BY k.tgl_kunjungan DESC";
+
+$stmt = $pdo->prepare($query);
+$stmt->bindParam(':nim', $nim);
+$stmt->execute();
 $riwayatKunjungan = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
@@ -155,16 +165,16 @@ $total_pengajuan = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     						<div class="body-a-container5">
 								<?php if (count($riwayatKunjungan) > 0): ?>
 									<?php foreach ($riwayatKunjungan as $data): ?>
-										<div class="card card3">
-											<img src="../sassets/assets2/profil/card/card-container.png" class="container-e card-container1" />
-											<div class="card-container2">
-												<p class="card-text text5"><?= htmlspecialchars($data['nama_tempat']) ?></p>
-												<div class="container-f container2">
-													<p class="container-text-paragraph6"><?= date('d M Y', strtotime($data['tgl_kunjungan'])) ?></p>
-												</div>
-											</div>
+								<div class="card card3">
+									<img src="../sassets/assets2/profil/card/card-container.png" class="container-e card-container1" />
+									<div class="card-container2">
+										<p class="card-text text5"><?= htmlspecialchars($data['nama_tempat']) ?></p>
+										<div class="container-f container2">
+											<p class="container-text-paragraph6"><?= date('d M Y', strtotime($data['tgl_kunjungan'])) ?></p>
 										</div>
-									<?php endforeach; ?>
+									</div>
+								</div>
+							<?php endforeach; ?>
 								<?php else: ?>
 									<p>Belum ada riwayat kunjungan</p>
 								<?php endif; ?>

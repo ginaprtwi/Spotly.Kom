@@ -1,4 +1,5 @@
 <?php
+session_start(); 
 require 'koneksi.php';
 $error = "";
 $success = "";
@@ -21,11 +22,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                $error = "NIM sudah terdaftar! Silakan login.";
 		} else {
 			$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $pdo->prepare("INSERT INTO mahasiswa (nim, nama_mahasiswa, email_unikom, password) VALUES (?, ?, ?, ?)");
-            $stmt->execute([$nim, $nama, $email, $hashedPassword]);
-            header("Location: beranda.php");
-   			exit;}
+			$stmt = $pdo->prepare("INSERT INTO mahasiswa (nim, nama_mahasiswa, email_unikom, password) VALUES (?, ?, ?, ?)");
+			$stmt->execute([$nim, $nama, $email, $hashedPassword]);
+
+			$_SESSION['nim']  = $nim;
+			$_SESSION['nama'] = $nama;
+
+			header("Location: beranda.php");
+			exit;
     }
+}
 }
 ?>
 
