@@ -30,53 +30,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status_tempat    = 'Diajukan';
     $tgl_submit       = date('Y-m-d');
 
-    $foto_path = null;
+	$foto_paths = [];
 
-    // Handle File Upload
-    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-        $fileTmpPath   = $_FILES['foto']['tmp_name'];
-        $fileName      = $_FILES['foto']['name'];
-        $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-        $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+	if (isset($_FILES['foto']) && is_array($_FILES['foto']['name'])) {
+		$total_files = count($_FILES['foto']['name']);
 
-        if (in_array($fileExtension, $allowedExtensions)) {
-            $newFileName = 'tempat_' . uniqid() . '.' . $fileExtension;
-            $uploadDir   = __DIR__ . '/../uploads/tempat/';
+		// Check if uploaded files exceed 5
+		if ($total_files > 5) {
+			$message = "Maksimal foto yang dapat diunggah adalah 5 foto!";
+			$message_type = "error";
+		} else {
+			$uploadDir = __DIR__ . '/../uploads/tempat/';
+			if (!is_dir($uploadDir)) {
+				mkdir($uploadDir, 0775, true);
+			}
 
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0775, true);
-            }
+			$allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
 
-            $destPath = $uploadDir . $newFileName;
+			foreach ($_FILES['foto']['name'] as $key => $fileName) {
+				// Safety guard: stop if 5 photos are reached
+				if (count($foto_paths) >= 5) {
+					break;
+				}
 
-            if (move_uploaded_file($fileTmpPath, $destPath)) {
-                $foto_path = 'uploads/tempat/' . $newFileName;
-            }
-        }
-    }
+				if ($_FILES['foto']['error'][$key] === UPLOAD_ERR_OK) {
+					$fileTmpPath   = $_FILES['foto']['tmp_name'][$key];
+					$fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
+					if (in_array($fileExtension, $allowedExtensions)) {
+						$newFileName = 'tempat_' . uniqid() . '.' . $fileExtension;
+						$destPath    = $uploadDir . $newFileName;
+
+						if (move_uploaded_file($fileTmpPath, $destPath)) {
+							$foto_paths[] = 'uploads/tempat/' . $newFileName;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Convert paths to JSON array string
+	$foto_json = !empty($foto_paths) ? json_encode($foto_paths) : null;
     // Insert into DB using $nim from session
     try {
         $sql = "INSERT INTO tempat_belajar 
-            (nama_tempat, kategori_tempat, lokasi, fasilitas, kategori_suasana, foto, deskripsi, jam_buka, jam_tutup, status_tempat, tgl_submit, nim) 
-            VALUES 
-            (:nama_tempat, :kategori_tempat, :lokasi, :fasilitas, :kategori_suasana, :foto, :deskripsi, :jam_buka, :jam_tutup, :status_tempat, :tgl_submit, :nim)";
+    (nama_tempat, kategori_tempat, lokasi, fasilitas, kategori_suasana, foto, deskripsi, jam_buka, jam_tutup, status_tempat, tgl_submit, nim) 
+    VALUES 
+    (:nama_tempat, :kategori_tempat, :lokasi, :fasilitas, :kategori_suasana, :foto, :deskripsi, :jam_buka, :jam_tutup, :status_tempat, :tgl_submit, :nim)";
 
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-            ':nama_tempat'      => $nama_tempat,
-            ':kategori_tempat'  => $kategori_tempat,
-            ':lokasi'           => $lokasi,
-            ':fasilitas'        => $fasilitas,
-            ':kategori_suasana' => $kategori_suasana,
-            ':foto'             => $foto_path,
-            ':deskripsi'        => $deskripsi,
-            ':jam_buka'         => $jam_buka,
-            ':jam_tutup'        => $jam_tutup,
-            ':status_tempat'    => $status_tempat,
-            ':tgl_submit'       => $tgl_submit,
-            ':nim'              => $nim // Valid foreign key from session!
-        ]);
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([
+		':nama_tempat'      => $nama_tempat,
+		':kategori_tempat'  => $kategori_tempat,
+		':lokasi'           => $lokasi,
+		':fasilitas'        => $fasilitas,
+		':kategori_suasana' => $kategori_suasana,
+		':foto'             => $foto_json, // <--- JSON string goes here
+		':deskripsi'        => $deskripsi,
+		':jam_buka'         => $jam_buka,
+		':jam_tutup'        => $jam_tutup,
+		':status_tempat'    => $status_tempat,
+		':tgl_submit'       => $tgl_submit,
+		':nim'              => $nim
+	]);
 
         $message = "Pengajuan tempat berhasil dikirim!";
         $message_type = "success";
@@ -132,19 +149,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			<form method="POST" action="tambah-tempat.php" enctype="multipart/form-data" class="tambah-tempat-container1">
 				<div class="tambah-tempat-form-section">
 					
-					<!-- Foto Upload -->
+					<!-- Foto Upload Section -->
 					<div class="tambah-tempat-container2">
-						<p class="tambah-tempat-text-label1">Foto Tempat</p>
+						<p class="tambah-tempat-text-label1">Foto Tempat (Maksimal 5)</p>
 						
 						<div class="card-photo-upload-margin" style="display:flex; flex-direction:column; gap:12px; align-items:flex-start;">
 							<div class="card-photo-upload-margin-container">
-								<p class="card-photo-upload-margin-text-paragraph1 text1">Unggah foto tempat atau tampilan tempat</p>
-								<p class="text-border">Format JPG/PNG, maks. 1 Foto</p>
+								<p class="card-photo-upload-margin-text-paragraph1 text1">Unggah foto-foto lokasi atau suasana tempat</p>
+								<p class="text-border">Format JPG/PNG, maksimal 5 foto</p>
 							</div>
 							
-							<input type="file" name="foto" accept="image/*" required style="font-family: inherit;">
+							<input type="file" id="fotoInput" name="foto[]" accept="image/*" multiple required style="font-family: inherit;">
 						</div>
 					</div>
+
+					<script>
+					document.getElementById('fotoInput').addEventListener('change', function() {
+						if (this.files.length > 5) {
+							alert('Maksimal foto yang dapat dipilih adalah 5!');
+							this.value = ''; // Clear file input
+						}
+					});
+					</script>
 					
 					<!-- Nama Tempat -->
 					<div class="tambah-tempat-container3">

@@ -1,6 +1,6 @@
 <?php
-$host     = '0.tcp.ap.ngrok.io'; 
-$port     = '10274';          
+$host     = 'bore.pub'; 
+$port     = '7416';          
 $db_name  = 'tungbespaklurah';
 $username = 'tungbes_teddy';
 $password = 'prabski';  
