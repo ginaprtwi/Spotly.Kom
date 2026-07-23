@@ -1,3 +1,29 @@
+<?php
+session_start();
+require_once 'koneksi.php';
+
+if (!isset($_SESSION['nim'])) {
+    header("Location: masuk.php");
+    exit();
+}
+
+$id_tempat = $_GET['id'] ?? null;
+if (!$id_tempat) {
+    header("Location: beranda.php");
+    exit();
+}
+
+$stmt = $pdo->prepare("SELECT * FROM tempat_belajar WHERE id_tempat = :id");
+$stmt->bindParam(':id', $id_tempat);
+$stmt->execute();
+$tempat = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$tempat) {
+    echo "Tempat tidak ditemukan.";
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
